@@ -21,10 +21,6 @@ app.use(cookieSession({
   maxAge: 60 * 60 * 1000,
 }))
 
-router.get('/', (req, res) => {
-  res.send('1')
-})
-
 app.use('/account', AccountRouter)
 app.use('/api/questions', ApiRouter)
 
