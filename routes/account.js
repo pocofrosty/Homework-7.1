@@ -18,7 +18,6 @@ router.post('/signup', async (req, res) => {
 
 router.post('/login', async (req, res) => {
   const { username: loginUsername, password: loginPassword } = req.body
-  console.log(1)
   try {
     const user = await User.findOne({ username: loginUsername })
     if (user.password === loginPassword) {
@@ -34,12 +33,10 @@ router.post('/login', async (req, res) => {
 
 router.post('/logout', isAuthenticated, (req, res) => {
   try {
-    if (req.session.username !== '') {
-      req.session.username = ''
-      res.send('log out success')
-    }
+    req.session = null
+    res.send('Log out success')
   } catch (e) {
-    res.send('failure to log out')
+    res.send('Failure to log out')
   }
 })
 

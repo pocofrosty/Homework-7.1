@@ -4,7 +4,7 @@ const { Schema, model } = mongoose
 
 const questionSchema = new Schema({
   questionText: { type: String, required: true },
-  answer: { type: String, required: true },
+  answer: { type: String },
   author: { type: String, required: true },
 })
 

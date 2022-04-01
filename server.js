@@ -23,6 +23,11 @@ app.use(cookieSession({
 app.use('/account', AccountRouter)
 app.use('/api', ApiRouter)
 
+app.use((err, req, res, next) => {
+  console.error(err.stack)
+  res.status(500).send('Something Broke!')
+})
+
 app.listen(3000, () => {
   console.log(`listening on port 3000`)
 })
