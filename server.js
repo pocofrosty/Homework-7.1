@@ -1,5 +1,9 @@
 const mongoose = require('mongoose')
 const express = require('express')
+const cookieSession = require('cookie-session')
+
+const AccountRouter = require('./routes/account')
+const ApiRouter = require('./routes/api')
 
 const app = express()
 const MONGO_URI = process.env.MONGODB_URI || 'mongodb+srv://dzheng:chinainn9209@cluster0.p1avm.mongodb.net/test'
@@ -9,17 +13,16 @@ mongoose.connect(MONGO_URI, {
   useUnifiedTopology: true,
 })
 
-const port = process.env.PORT || 3000
-
 app.use(express.json())
+app.use(cookieSession({
+  name: 'session',
+  keys: ['apples'],
+  maxAge: 60 * 60 * 1000,
+}))
 
-app.get('/', (req, res) => res.send('hello world!'))
+app.use('/account', AccountRouter)
+app.use('/api', ApiRouter)
 
-app.post('/cred', (req, res) => {
-  const { username, password } = req.body
-  console.log(`${username}${password}`)
-})
-
-app.listen(port, () => {
-  console.log(`listening on port ${port}`)
+app.listen(3000, () => {
+  console.log(`listening on port 3000`)
 })

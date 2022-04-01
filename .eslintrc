@@ -46,7 +46,7 @@
       "error",
       {
         "array": true,
-        "object": true
+        "object": false
       },
       {
         "enforceForRenamedProperties": true
