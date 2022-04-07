@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const express = require('express')
 const cookieSession = require('cookie-session')
+const path = require('path')
 
 const AccountRouter = require('./routes/account')
 const ApiRouter = require('./routes/api')
@@ -20,6 +21,7 @@ app.use(cookieSession({
   keys: ['apples'],
   maxAge: 60 * 60 * 1000,
 }))
+app.use(express.static('dist'))
 
 app.use('/account', AccountRouter)
 app.use('/api/questions', ApiRouter)
@@ -27,6 +29,14 @@ app.use('/api/questions', ApiRouter)
 app.use((err, req, res, next) => {
   console.error(err.stack)
   res.status(500).send(err.message)
+})
+
+app.get('/favicon.ico', (req, res) => {
+  res.status(404).send()
+})
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../dist/index.html'))
 })
 
 app.listen(3000, () => {
