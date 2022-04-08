@@ -11,14 +11,6 @@ import HomePage from './components/HomePage'
 // eslint-disable-next-line import/prefer-default-export
 export const App = () => {
   const [currentUsername, setCurrentUsername] = useState('')
-  const [questionList, setQuestionList] = useState([])
-
-  const updateState = async () => {
-    const { data } = await axios.get('/account/currentLogin')
-    setCurrentUsername(data)
-    const { data: data2 } = await axios.get('/api/questions')
-    setQuestionList(data2)
-  }
 
   return (
     <div>
@@ -26,7 +18,7 @@ export const App = () => {
         <Route path="/" element={<Layout />}>
           <Route path="signup" element={<SignUpForm />} />
           <Route path="login" element={<LoginForm setCurrentUsername={setCurrentUsername} />} />
-          <Route path="" element={<HomePage updateState={updateState} setCurrentUsername={setCurrentUsername} currentUsername={currentUsername} questionList={questionList}/>} />
+          <Route path="" element={<HomePage setCurrentUsername={setCurrentUsername} currentUsername={currentUsername} />} />
           <Route path="*" element={<Test />} />
         </Route>
       </Routes>

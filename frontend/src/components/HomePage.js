@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 
@@ -10,7 +10,7 @@ import TextBox from './subcomponents/TextBox'
 import SubmitAnswerButton from './subcomponents/SubmitAnswerButton'
 
 const HomePage = ({
-  setCurrentUsername, currentUsername, questionList, updateState,
+  setCurrentUsername, currentUsername,
 }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
 
@@ -18,8 +18,16 @@ const HomePage = ({
   const [currentQuestionText, setCurrentQuestionText] = useState('')
   const [currentAnswer, setCurrentAnswer] = useState('')
   const [currentID, setCurrentID] = useState('')
+  const [questionList, setQuestionList] = useState([])
 
   const [answerText, setAnswerText] = useState('')
+
+  const updateState = async () => {
+    const { data } = await axios.get('/account/currentLogin')
+    setCurrentUsername(data)
+    const { data: data2 } = await axios.get('/api/questions')
+    setQuestionList(data2)
+  }
 
   useEffect(() => {
     updateState()
@@ -48,7 +56,7 @@ const HomePage = ({
 
   const addNewQuestionButton = () => (
     <label>
-      new question
+      {answerText}
     </label>
   )
 
@@ -65,7 +73,7 @@ const HomePage = ({
     <>
       <Title text="Answer This Question" />
       <TextBox backgroundName="Answer" text={answerText} setText={setAnswerText} />
-      <SubmitAnswerButton _id={currentID} answer={answerText} />
+      <SubmitAnswerButton _id={currentID} answer={answerText} updateState={updateState} />
     </>
   )
   return (
@@ -95,7 +103,6 @@ const HomePage = ({
       <CurrentPost author={currentAuthor} questionText={currentQuestionText} answer={currentAnswer} />
       <br />
       {isLoggedIn ? answerForm() : null}
-      {/* {isLoggedIn ? showLoggedIn() : showLoggedOut()} */}
     </>
   )
 }

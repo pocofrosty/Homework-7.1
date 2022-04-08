@@ -13,7 +13,6 @@ const LoginButton = ({
         const navigate = switchScreens
         navigate('/', { replace: true })
       } catch (e) {
-        console.log(e)
         alert('Incorrect Username/Password')
       }
     }}
