@@ -29,15 +29,13 @@ export const App = () => {
     getCurrentUser()
   }, [])
 
-  console.log(questionList)
-
   return (
     <div>
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route path="signup" element={<SignUpForm />} />
           <Route path="login" element={<LoginForm setCurrentUsername={setCurrentUsername} />} />
-          <Route path="" element={<HomePage currentUsername={currentUsername} questionList={questionList}/>} />
+          <Route path="" element={<HomePage setCurrentUsername={setCurrentUsername} currentUsername={currentUsername} questionList={questionList}/>} />
           <Route path="*" element={<Test />} />
         </Route>
       </Routes>
