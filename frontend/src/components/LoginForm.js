@@ -13,7 +13,7 @@ const LoginForm = ({}) => {
     <>
       <Title text="Log In" />
       <br />
-      <label> Username: </label>
+      <label> username: </label>
       <br />
       <TextBox backgroundName="Username" setText={setUsername} />
       <br />

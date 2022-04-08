@@ -7,7 +7,6 @@ const cors = require('cors')
 const AccountRouter = require('./routes/account')
 const ApiRouter = require('./routes/api')
 
-const app = express()
 const MONGO_URI = process.env.MONGODB_URI || 'mongodb+srv://dzheng:chinainn9209@cluster0.p1avm.mongodb.net/test'
 
 mongoose.connect(MONGO_URI, {
@@ -15,13 +14,18 @@ mongoose.connect(MONGO_URI, {
   useUnifiedTopology: true,
 })
 
+const app = express()
+
 app.use(express.json())
+
 app.use(cookieSession({
   name: 'session',
   keys: ['apples'],
   maxAge: 60 * 60 * 1000,
 }))
+
 app.use(express.static('dist'))
+
 app.use(cors())
 
 app.use('/account', AccountRouter)

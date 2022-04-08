@@ -14,7 +14,7 @@ export const App = () => {
 
   useEffect(() => {
     const getUsers = async () => {
-      const { questions } = await axios.get('/api/questions')
+      const { questions } = await axios.get('/api/questions/')
       setQuestions(questions)
       console.log(questions)
       console.log(1)
@@ -43,6 +43,6 @@ const Layout = () => (
 
 const Test = () => (
   <div>
-    <h1>Test </h1>
+    <h1>Test2 </h1>
   </div>
 )
