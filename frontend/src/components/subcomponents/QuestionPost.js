@@ -1,13 +1,13 @@
 import React from 'react'
 
 const QuestionPost = ({
-  questionText, author, answer, setCurrentAnswer, setCurrentAuthor, setCurrentQuestionText,
+  questionText, author, answer, setCurrentAnswer, setCurrentAuthor, setCurrentQuestionText, setCurrentID, currentID,
 }) => (
   <button onClick={() => {
-    console.log(1)
     setCurrentAuthor(author)
     setCurrentQuestionText(questionText)
     setCurrentAnswer(answer)
+    setCurrentID(currentID)
   }}
   >
     <label>

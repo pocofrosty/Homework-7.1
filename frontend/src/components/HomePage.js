@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 
@@ -9,12 +9,25 @@ import LogoutButton from './subcomponents/LogoutButton'
 import TextBox from './subcomponents/TextBox'
 import SubmitAnswerButton from './subcomponents/SubmitAnswerButton'
 
-const HomePage = ({ setCurrentUsername, currentUsername, questionList }) => {
+const HomePage = ({
+  setCurrentUsername, currentUsername, questionList, updateState,
+}) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
 
   const [currentAuthor, setCurrentAuthor] = useState('')
   const [currentQuestionText, setCurrentQuestionText] = useState('')
   const [currentAnswer, setCurrentAnswer] = useState('')
+  const [currentID, setCurrentID] = useState('')
+
+  const [answerText, setAnswerText] = useState('')
+
+  useEffect(() => {
+    updateState()
+    const interval = setInterval(() => {
+      updateState()
+    }, 2000)
+    return () => clearInterval(interval)
+  }, [])
 
   const checkIfLoggedIn = async () => {
     const { data: { LoggedIn } } = await axios.get('/account/verify')
@@ -51,11 +64,10 @@ const HomePage = ({ setCurrentUsername, currentUsername, questionList }) => {
   const answerForm = () => (
     <>
       <Title text="Answer This Question" />
-      <TextBox backgroundName="Answer" />
-      <SubmitAnswerButton />
+      <TextBox backgroundName="Answer" text={answerText} setText={setAnswerText} />
+      <SubmitAnswerButton _id={currentID} answer={answerText} />
     </>
   )
-
   return (
     <>
       <Title text="Campuswire Lite" />
@@ -71,9 +83,11 @@ const HomePage = ({ setCurrentUsername, currentUsername, questionList }) => {
             questionText={question.questionText}
             answer={question.answer}
             key={question._id}
+            currentID={question._id}
             setCurrentAnswer={setCurrentAnswer}
             setCurrentAuthor={setCurrentAuthor}
             setCurrentQuestionText={setCurrentQuestionText}
+            setCurrentID={setCurrentID}
           />
         ))}
       </div>

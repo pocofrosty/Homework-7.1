@@ -13,21 +13,12 @@ export const App = () => {
   const [currentUsername, setCurrentUsername] = useState('')
   const [questionList, setQuestionList] = useState([])
 
-  useEffect(() => {
-    const getQuestions = async () => {
-      const { data } = await axios.get('/api/questions')
-      setQuestionList(data)
-    }
-    getQuestions()
-  }, [])
-
-  useEffect(() => {
-    const getCurrentUser = async () => {
-      const { data } = await axios.get('/account/currentLogin')
-      setCurrentUsername(data)
-    }
-    getCurrentUser()
-  }, [])
+  const updateState = async () => {
+    const { data } = await axios.get('/account/currentLogin')
+    setCurrentUsername(data)
+    const { data: data2 } = await axios.get('/api/questions')
+    setQuestionList(data2)
+  }
 
   return (
     <div>
@@ -35,7 +26,7 @@ export const App = () => {
         <Route path="/" element={<Layout />}>
           <Route path="signup" element={<SignUpForm />} />
           <Route path="login" element={<LoginForm setCurrentUsername={setCurrentUsername} />} />
-          <Route path="" element={<HomePage setCurrentUsername={setCurrentUsername} currentUsername={currentUsername} questionList={questionList}/>} />
+          <Route path="" element={<HomePage updateState={updateState} setCurrentUsername={setCurrentUsername} currentUsername={currentUsername} questionList={questionList}/>} />
           <Route path="*" element={<Test />} />
         </Route>
       </Routes>
