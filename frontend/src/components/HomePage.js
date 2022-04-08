@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 
@@ -8,15 +8,15 @@ import CurrentPost from './subcomponents/CurrentPost'
 import LogoutButton from './subcomponents/LogoutButton'
 import TextBox from './subcomponents/TextBox'
 import SubmitAnswerButton from './subcomponents/SubmitAnswerButton'
+import QuestionForm from './subcomponents/QuestionForm'
 
 const HomePage = ({
   setCurrentUsername, currentUsername,
 }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
 
-  const [currentAuthor, setCurrentAuthor] = useState('')
-  const [currentQuestionText, setCurrentQuestionText] = useState('')
-  const [currentAnswer, setCurrentAnswer] = useState('')
+  const [questionMode, setQuestionMode] = useState(false)
+
   const [currentID, setCurrentID] = useState('')
   const [questionList, setQuestionList] = useState([])
 
@@ -29,10 +29,21 @@ const HomePage = ({
     setQuestionList(data2)
   }
 
+  const getQuestionFromID = id => {
+    if (id !== '') {
+      const temp = questionList.filter(q => q._id === id)
+      return temp[0]
+    }
+    return null
+  }
+
   useEffect(() => {
     updateState()
-    const interval = setInterval(() => {
-      updateState()
+    const interval = setInterval(async () => {
+      const { data } = await axios.get('/account/currentLogin')
+      setCurrentUsername(data)
+      const { data: data2 } = await axios.get('/api/questions')
+      setQuestionList(data2)
     }, 2000)
     return () => clearInterval(interval)
   }, [])
@@ -55,9 +66,13 @@ const HomePage = ({
   )
 
   const addNewQuestionButton = () => (
-    <label>
-      {answerText}
-    </label>
+    <button
+      onClick={() => {
+        setQuestionMode(!questionMode)
+      }}
+    >
+      Add New Question
+    </button>
   )
 
   const logoutButton = () => (
@@ -76,6 +91,11 @@ const HomePage = ({
       <SubmitAnswerButton _id={currentID} answer={answerText} updateState={updateState} />
     </>
   )
+
+  const questionForm = () => (
+    <QuestionForm />
+  )
+
   return (
     <>
       <Title text="Campuswire Lite" />
@@ -83,24 +103,20 @@ const HomePage = ({
       {isLoggedIn ? logoutButton() : null}
       <br />
       {isLoggedIn ? addNewQuestionButton() : loginButton()}
+      {questionMode ? questionForm() : null}
       <br />
       <div>
         {questionList.map(question => (
           <QuestionPost
-            author={question.author}
-            questionText={question.questionText}
-            answer={question.answer}
             key={question._id}
-            currentID={question._id}
-            setCurrentAnswer={setCurrentAnswer}
-            setCurrentAuthor={setCurrentAuthor}
-            setCurrentQuestionText={setCurrentQuestionText}
+            questionID={question._id}
             setCurrentID={setCurrentID}
+            getQuestionFromID={getQuestionFromID}
           />
         ))}
       </div>
       <br />
-      <CurrentPost author={currentAuthor} questionText={currentQuestionText} answer={currentAnswer} />
+      <CurrentPost getQuestionFromID={getQuestionFromID} currentID={currentID} />
       <br />
       {isLoggedIn ? answerForm() : null}
     </>

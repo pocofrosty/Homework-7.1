@@ -33,6 +33,6 @@ const Layout = () => (
 
 const Test = () => (
   <div>
-    <h1>Test2 </h1>
+    <h1>Invalid Site </h1>
   </div>
 )
