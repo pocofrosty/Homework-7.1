@@ -1,19 +1,21 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import TextBox from './subcomponents/TextBox'
 import Title from './subcomponents/Title'
 import LoginButton from './subcomponents/LoginButton'
 
-const LoginForm = ({}) => {
+const LoginForm = ({ setCurrentUsername }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+
+  const navigate = useNavigate()
 
   return (
     <>
       <Title text="Log In" />
       <br />
-      <label> username: </label>
+      <label> Username: </label>
       <br />
       <TextBox backgroundName="Username" setText={setUsername} />
       <br />
@@ -21,10 +23,10 @@ const LoginForm = ({}) => {
       <br />
       <TextBox backgroundName="Password" setText={setPassword} />
       <br />
-      <LoginButton username={username} password={password} />
+      <LoginButton username={username} password={password} setCurrentUsername={setCurrentUsername} switchScreens={navigate} />
       <br />
       <label> Don&apos;t have an account? </label>
-      <Link to="/signup"> Login</Link>
+      <Link to="/signup"> Sign Up </Link>
     </>
   )
 }

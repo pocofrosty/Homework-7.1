@@ -10,25 +10,34 @@ import HomePage from './components/HomePage'
 
 // eslint-disable-next-line import/prefer-default-export
 export const App = () => {
-  const [question, setQuestions] = useState([])
+  const [currentUsername, setCurrentUsername] = useState('')
+  const [questionList, setQuestionList] = useState([])
 
   useEffect(() => {
-    const getUsers = async () => {
-      const { questions } = await axios.get('/api/questions/')
-      setQuestions(questions)
-      console.log(questions)
-      console.log(1)
+    const getQuestions = async () => {
+      const { data } = await axios.get('/api/questions')
+      setQuestionList(data)
     }
-    getUsers()
+    getQuestions()
   }, [])
+
+  useEffect(() => {
+    const getCurrentUser = async () => {
+      const { data } = await axios.get('/account/currentLogin')
+      setCurrentUsername(data)
+    }
+    getCurrentUser()
+  }, [])
+
+  console.log(questionList)
 
   return (
     <div>
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route path="signup" element={<SignUpForm />} />
-          <Route path="login" element={<LoginForm />} />
-          <Route path="" element={<HomePage />} />
+          <Route path="login" element={<LoginForm setCurrentUsername={setCurrentUsername} />} />
+          <Route path="" element={<HomePage currentUsername={currentUsername} questionList={questionList}/>} />
           <Route path="*" element={<Test />} />
         </Route>
       </Routes>

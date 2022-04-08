@@ -39,4 +39,20 @@ router.post('/logout', isAuthenticated, (req, res, next) => {
   }
 })
 
+router.get('/verify', (req, res) => {
+  if (req.session.username) {
+    res.json({ LoggedIn: true })
+  } else {
+    res.json({ LoggedIn: false })
+  }
+})
+
+router.get('/currentLogin', (req, res) => {
+  try {
+    res.json(req.session.username)
+  } catch (err) {
+    res.json('')
+  }
+})
+
 module.exports = router

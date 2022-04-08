@@ -9,6 +9,7 @@ router.get('/', async (req, res, next) => {
   try {
     const questions = await Question.find()
     res.json(questions)
+    res.send('Questions Sucessfully Loaded')
   } catch (err) {
     next(err)
   }
