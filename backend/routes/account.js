@@ -6,7 +6,7 @@ const isAuthenticated = require('../middlewares/isAuthenticated')
 const router = express.Router()
 
 router.post('/signup', async (req, res, next) => {
-  const { username, password } = req.body
+  const { body: { username, password } } = req
   try {
     await User.create({ username, password })
     res.send('Successful Signup')
@@ -16,7 +16,7 @@ router.post('/signup', async (req, res, next) => {
 })
 
 router.post('/login', async (req, res, next) => {
-  const { username: loginUsername, password: loginPassword } = req.body
+  const { body: { username: loginUsername, password: loginPassword } } = req
   try {
     const user = await User.findOne({ username: loginUsername })
     if (user.password === loginPassword) {

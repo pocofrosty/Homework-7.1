@@ -8,7 +8,7 @@ const router = express.Router()
 router.get('/', async (req, res, next) => {
   try {
     const questions = await Question.find()
-    res.send('Questions Retrieved Successfully')
+    res.json(questions)
   } catch (err) {
     next(err)
   }
@@ -16,8 +16,8 @@ router.get('/', async (req, res, next) => {
 
 router.post('/add', isAuthenticated, async (req, res, next) => {
   try {
-    const { questionText } = req.body
-    const { username: author }= req.session
+    const { body: { questionText } } = req
+    const { session: { username: author } } = req
     await Question.create({ questionText, author })
     res.send('Question Sucessfully Added')
   } catch (err) {
@@ -27,7 +27,7 @@ router.post('/add', isAuthenticated, async (req, res, next) => {
 
 router.post('/answer', isAuthenticated, async (req, res, next) => {
   try {
-    const { _id, answer } = req.body
+    const { body: { _id, answer } } = req
     await Question.updateOne({ _id }, { answer })
     res.send('Question Updated')
   } catch (err) {

@@ -2,10 +2,10 @@ const mongoose = require('mongoose')
 const express = require('express')
 const cookieSession = require('cookie-session')
 const path = require('path')
+const cors = require('cors')
 
 const AccountRouter = require('./routes/account')
 const ApiRouter = require('./routes/api')
-const router = require('./routes/api')
 
 const app = express()
 const MONGO_URI = process.env.MONGODB_URI || 'mongodb+srv://dzheng:chinainn9209@cluster0.p1avm.mongodb.net/test'
@@ -22,6 +22,7 @@ app.use(cookieSession({
   maxAge: 60 * 60 * 1000,
 }))
 app.use(express.static('dist'))
+app.use(cors())
 
 app.use('/account', AccountRouter)
 app.use('/api/questions', ApiRouter)
