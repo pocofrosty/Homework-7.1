@@ -14,6 +14,7 @@ export const App = () => {
 
   return (
     <div>
+      <h1 className="font-bold"> Testing </h1>
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route path="signup" element={<SignUpForm />} />
